@@ -50,6 +50,11 @@ class ServerHandle {
         this.players = { };
 
         this.setSettings(settings);
+
+        //My things to discretize server
+        this.discrete = false;
+        this.next_step = false;
+
     }
 
     get version() { return version; }
@@ -161,6 +166,12 @@ class ServerHandle {
     }
 
     onTick() {
+        if (this.discrete){
+            if (!this.next_step){
+                return;
+            }
+            this.next_step = false;
+        }
         this.stopwatch.begin();
         this.tick++;
 
@@ -169,7 +180,6 @@ class ServerHandle {
         this.listener.update();
         this.matchmaker.update();
         this.gamemode.onHandleTick();
-
         this.averageTickTime = this.stopwatch.elapsed();
         this.stopwatch.stop();
     }

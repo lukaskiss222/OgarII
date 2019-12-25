@@ -218,6 +218,26 @@ function getString(args, handle, index, argName) {
  */
 module.exports = (commands, chatCommands) => {
     commands.register(
+        //MyCommands
+        genCommand({
+            name: "discretize",
+            args: "",
+            desc: "discritize or undiscretize space",
+
+            exec: (handle, context, args) => {
+                handle.discrete = !handle.discrete;
+            }
+        }),
+        genCommand({
+            name :"next_step",
+            args : "",
+            desc : "if server is discretized, this command will invoke next step",
+
+            exec: (handle, context, args) => {
+                handle.next_step = true;
+            }
+        }),
+        //Normal Commands
         genCommand({
             name: "help",
             args: "",
