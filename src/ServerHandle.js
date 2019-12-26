@@ -166,20 +166,31 @@ class ServerHandle {
     }
 
     onTick() {
-        if (this.discrete){
-            if (!this.next_step){
-                return;
-            }
-            this.next_step = false;
-        }
         this.stopwatch.begin();
         this.tick++;
+
+        if (this.discrete){
+            if (this.next_step){
+                for (let id in this.worlds)
+                this.worlds[id].update();
+                this.next_step = false;
+            
+            }
+            this.listener.update();
+            this.matchmaker.update();
+            this.gamemode.onHandleTick();
+
+            this.averageTickTime = this.stopwatch.elapsed();
+            this.stopwatch.stop();
+            return;
+        }
 
         for (let id in this.worlds)
             this.worlds[id].update();
         this.listener.update();
         this.matchmaker.update();
         this.gamemode.onHandleTick();
+
         this.averageTickTime = this.stopwatch.elapsed();
         this.stopwatch.stop();
     }
