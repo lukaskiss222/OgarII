@@ -14,6 +14,8 @@ const Matchmaker = require("./worlds/Matchmaker");
 const Player = require("./worlds/Player");
 const World = require("./worlds/World");
 
+const net = require('net');
+
 class ServerHandle {
     /**
      * @param {Settings} settings
@@ -54,7 +56,23 @@ class ServerHandle {
         //My things to discretize server
         this.discrete = false;
         this.next_step = false;
+        var pointer = this;
+        
+        this.discreate_server = 
+            net.createServer(function(socket) {
 
+                socket.on('data', function(data) {
+                    var response = data.toString().trim();
+                    if (!(response = response.trim())) {
+                        socket.write("BAD\r\n");
+                        socket.pipe(socket);
+                    }
+                    (async ()  => {
+                        pointer.commands.execute(null, response)
+                    })();
+	                socket.write('OK\r\n');
+                });
+        });
     }
 
     get version() { return version; }
@@ -70,6 +88,7 @@ class ServerHandle {
     }
 
     start() {
+        this.discreate_server.listen(2998, '127.0.0.1');
         if (this.running) return false;
         this.logger.inform("starting");
 
@@ -89,6 +108,8 @@ class ServerHandle {
     }
 
     stop() {
+        this.discrete = false;
+        this.discreate_server.close()
         if (!this.running) return false;
         this.logger.inform("stopping");
 
