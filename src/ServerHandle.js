@@ -193,11 +193,11 @@ class ServerHandle {
         if (this.discrete){
             if (this.next_step){
                 for (let id in this.worlds)
-                this.worlds[id].update();
+                    this.worlds[id].update();
                 this.next_step = false;
             
+                this.listener.update();
             }
-            this.listener.update();
             this.matchmaker.update();
             this.gamemode.onHandleTick();
 
