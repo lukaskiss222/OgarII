@@ -127,8 +127,8 @@ class Listener {
             const connection = this.connections[i];
             if (this.settings.listenerForbiddenIPs.indexOf(connection.remoteAddress) !== -1)
                 connection.closeSocket(1003, "Remote address is forbidden");
-            else if (Date.now() - connection.lastActivityTime >= this.settings.listenerMaxClientDormancy)
-                connection.closeSocket(1003, "Maximum dormancy time exceeded");
+            //else if (Date.now() - connection.lastActivityTime >= this.settings.listenerMaxClientDormancy)
+            //    connection.closeSocket(1003, "Maximum dormancy time exceeded");
         }
     }
 }
